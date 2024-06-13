@@ -9,12 +9,17 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const { loginWithGooglePopUp } = useContext(AuthContext);
+  const { loginWithGooglePopUp, signUpWithEmailAndPassword } =
+    useContext(AuthContext);
 
   const handleRegister = (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
       setError("Confirm parssword do not match!");
+    } else {
+      signUpWithEmailAndPassword(email, password).then((data) =>
+        console.log(data)
+      );
     }
   };
 
