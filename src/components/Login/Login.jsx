@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import img from "../../assets/Google__G__logo.svg.png";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+import toast, { Toaster } from "react-hot-toast";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleRegister = (event) => {};
+  const { loginWithGooglePopUp } = useContext(AuthContext);
+  const handleRegister = (e) => {
+    e.preventDefault();
+    console.log(email, password);
+  };
 
   const handleGoogleSignIn = () => {
-    alert("Sign in with Google");
+    loginWithGooglePopUp().then((data) => {
+      if (data.user.email) {
+        toast("Login Success!");
+      }
+    });
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center">
+      <Toaster />
       <form
         onSubmit={handleRegister}
         className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md"

@@ -1,27 +1,35 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import img from "../../assets/Google__G__logo.svg.png";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+import toast, { Toaster } from "react-hot-toast";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const { loginWithGooglePopUp } = useContext(AuthContext);
 
   const handleRegister = (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
+      setError("Confirm parssword do not match!");
     }
-    alert(`Registered with Name: ${name}, Email: ${email}`);
   };
 
   const handleGoogleSignIn = () => {
-    alert("Sign in with Google");
+    loginWithGooglePopUp().then((data) => {
+      if (data.user.email) {
+        toast("Login Success!");
+        setError("");
+      }
+    });
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center">
+      <Toaster />
       <form
         onSubmit={handleRegister}
         className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md"
@@ -79,6 +87,7 @@ const Register = () => {
             required
           />
         </div>
+        {error && <p className="text-red-500 mb-3 mt-0">{error}</p>}
         <button
           type="submit"
           className="w-full py-3 bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
